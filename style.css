@@ -1,213 +1,199 @@
 /* =========================
-   MOBILE-ONLY MASTER MODE
+   MOBILE INTERACTION SYSTEM
    ========================= */
 
 @media (max-width: 768px) {
 
   /* -------------------------
-     GLOBAL FEEL
-  ------------------------- */
-
-  body {
-    font-size: 15px;
-    letter-spacing: 0.2px;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* smoother scroll feel */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* -------------------------
-     GLASS (OPTIMIZED)
-  ------------------------- */
-
-  .glass,
-  .glass-strong {
-    backdrop-filter: blur(10px) saturate(120%);
-    border: 1px solid rgba(255,255,255,0.06);
-  }
-
-  /* reduce heavy animations */
-  .glass::after,
-  .glass-strong::after {
-    animation: none !important;
-    opacity: 0.06;
-  }
-
-  /* -------------------------
-     TOUCH FEEDBACK
+     TAP RIPPLE EFFECT
   ------------------------- */
 
   button,
-  a {
-    transition: transform 0.12s ease, background 0.2s ease;
+  a,
+  .soft-pop {
+    position: relative;
+    overflow: hidden;
   }
 
-  button:active,
-  a:active {
-    transform: scale(0.96);
-    background: rgba(255,255,255,0.08);
+  button:active::after,
+  a:active::after,
+  .soft-pop:active::after {
+    content: "";
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: radial-gradient(circle, rgba(255,255,255,0.25), transparent 60%);
+    border-radius: 50%;
+    animation: ripple 0.5s ease-out;
+    pointer-events: none;
+  }
+
+  @keyframes ripple {
+    to {
+      transform: translate(-50%, -50%) scale(1.5);
+      opacity: 0;
+    }
   }
 
   /* -------------------------
-     NAV = APP-LIKE
-  ------------------------- */
-
-  .nav-link {
-    border-radius: 14px;
-    font-size: 14px;
-  }
-
-  .nav-link.active-link {
-    background: rgba(96,165,250,0.12);
-    border: 1px solid rgba(96,165,250,0.25);
-    box-shadow: 0 0 12px rgba(96,165,250,0.2);
-  }
-
-  /* -------------------------
-     CARDS = FLOATING UI
+     PRESS DEPTH EFFECT
   ------------------------- */
 
   .soft-pop {
-    border-radius: 18px;
-    background: rgba(255,255,255,0.04);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
   }
 
   .soft-pop:active {
-    transform: scale(0.97);
-  }
-
-  /* subtle depth */
-  .soft-pop {
-    box-shadow: 
-      0 4px 12px rgba(0,0,0,0.5),
-      inset 0 1px 0 rgba(255,255,255,0.04);
+    transform: scale(0.94);
+    box-shadow: inset 0 4px 15px rgba(0,0,0,0.8);
   }
 
   /* -------------------------
-     COMMAND BOX (TERMINAL FEEL)
+     SCROLL FADE + PARALLAX FEEL
+  ------------------------- */
+
+  section {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  /* when visible (you already toggle this in JS) */
+  .section-visible {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .section-hidden {
+    transform: translateY(40px) scale(0.97);
+    opacity: 0;
+  }
+
+  /* -------------------------
+     ACTIVE SECTION GLOW
+  ------------------------- */
+
+  .section-visible .glass {
+    box-shadow: 
+      0 0 25px rgba(96,165,250,0.15),
+      0 10px 30px rgba(0,0,0,0.6);
+  }
+
+  /* -------------------------
+     NAV CLICK FEEDBACK
+  ------------------------- */
+
+  .nav-link:active {
+    transform: scale(0.92);
+    background: rgba(96,165,250,0.2);
+  }
+
+  /* -------------------------
+     BUTTON GLOW ON TAP
+  ------------------------- */
+
+  button:active {
+    box-shadow: 
+      0 0 20px rgba(96,165,250,0.5),
+      inset 0 0 10px rgba(255,255,255,0.2);
+  }
+
+  /* -------------------------
+     TERMINAL "LIVE" FEEL
   ------------------------- */
 
   .command {
-    font-size: 13px;
-    line-height: 1.5;
-    border-radius: 16px;
-    background: linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.9),
-      rgba(0,0,0,0.7)
-    );
+    position: relative;
   }
 
-  /* glow edges */
-  .command::before {
+  .command::after {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    box-shadow: inset 0 0 20px rgba(0,255,100,0.08);
-    pointer-events: none;
+    box-shadow: inset 0 0 25px rgba(0,255,100,0.15);
+    animation: terminalPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes terminalPulse {
+    0%,100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
   }
 
   /* -------------------------
-     LOADER = PREMIUM FEEL
+     LOADER CLICK REACTION
   ------------------------- */
 
-  #loader {
-    backdrop-filter: blur(8px);
-  }
-
-  .spinner {
-    width: 60px;
-    height: 60px;
-    border-width: 3px;
-    box-shadow: 0 0 25px rgba(255,255,255,0.2);
-  }
-
-  /* breathing glow */
-  #loader::after {
-    content: "";
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    background: radial-gradient(circle, rgba(96,165,250,0.15), transparent);
-    border-radius: 50%;
-    animation: mobileBreathe 2.2s ease-in-out infinite;
-  }
-
-  @keyframes mobileBreathe {
-    0%,100% { transform: scale(0.9); opacity: 0.4; }
-    50% { transform: scale(1.15); opacity: 1; }
+  #loader:active {
+    transform: scale(0.98);
   }
 
   /* -------------------------
-     PROGRESS BAR SMOOTH
-  ------------------------- */
-
-  #progressBar {
-    transition: width 0.25s ease-out !important;
-    box-shadow: 0 0 10px rgba(255,255,255,0.3);
-  }
-
-  /* -------------------------
-     TEXT READABILITY BOOST
-  ------------------------- */
-
-  p {
-    line-height: 1.6;
-    color: rgba(255,255,255,0.75);
-  }
-
-  h1, h2, h3 {
-    letter-spacing: 0.4px;
-  }
-
-  /* -------------------------
-     MOBILE TOPBAR = STICKY APP BAR
-  ------------------------- */
-
-  .md\\:hidden {
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-  }
-
-  /* -------------------------
-     SCROLL SNAP (FEELS LIKE APP)
+     SCROLL MOMENTUM FEEL
   ------------------------- */
 
   main {
-    scroll-snap-type: y proximity;
+    scroll-behavior: smooth;
   }
 
-  section {
-    scroll-snap-align: start;
+  /* -------------------------
+     FLOATING UI EFFECT
+  ------------------------- */
+
+  .glass {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .glass:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 
+      0 5px 15px rgba(0,0,0,0.8);
+  }
+
+  /* -------------------------
+     PROGRESS BAR GLOW ANIMATION
+  ------------------------- */
+
+  #progressBar {
+    position: relative;
+    overflow: hidden;
+  }
+
+  #progressBar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.6),
+      transparent
+    );
+    animation: progressShine 1.5s infinite;
+  }
+
+  @keyframes progressShine {
+    to { left: 120%; }
   }
 
 }
 
 /* =========================
-   EXTRA SMALL DEVICES
+   EXTRA SMALL DEVICES BOOST
    ========================= */
 
 @media (max-width: 420px) {
 
-  body {
-    font-size: 14px;
+  .soft-pop:active {
+    transform: scale(0.92);
   }
 
-  .glass {
-    padding: 1rem !important;
-  }
-
-  .command {
-    font-size: 12px;
-  }
-
-  h2 {
-    font-size: 1.6rem;
+  button:active {
+    transform: scale(0.9);
   }
 
 }
