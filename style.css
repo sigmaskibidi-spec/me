@@ -1,165 +1,213 @@
-/* ===== ENHANCEMENTS ONLY — NO CONFLICTS ===== */
+/* =========================
+   MOBILE-ONLY MASTER MODE
+   ========================= */
 
-/* subtle glow layer */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(59,130,246,0.08), transparent 40%),
-    radial-gradient(circle at 80% 90%, rgba(168,85,247,0.08), transparent 40%);
-  z-index: 0;
-}
+@media (max-width: 768px) {
 
-/* smooth font rendering */
-body {
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+  /* -------------------------
+     GLOBAL FEEL
+  ------------------------- */
 
-/* ===== CARD DEPTH BOOST ===== */
-.glass,
-.glass-strong {
-  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-}
-
-/* hover glow (very subtle) */
-.glass:hover,
-.glass-strong:hover {
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.35),
-    0 0 0 1px rgba(255,255,255,0.06);
-}
-
-/* ===== NAV IMPROVEMENT ===== */
-.nav-link {
-  position: relative;
-  overflow: hidden;
-}
-
-/* sliding highlight */
-.nav-link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.06),
-    transparent
-  );
-  transform: translateX(-100%);
-  transition: transform 0.4s ease;
-}
-
-.nav-link:hover::after {
-  transform: translateX(100%);
-}
-
-/* ===== BUTTON FEEL ===== */
-.copy-btn {
-  transition: all 0.2s ease;
-}
-
-.copy-btn:hover {
-  transform: scale(1.05);
-  background: rgba(255,255,255,0.12);
-}
-
-/* ===== COMMAND BLOCK ===== */
-.command {
-  position: relative;
-}
-
-/* top highlight line */
-.command::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,255,255,0.4),
-    transparent
-  );
-  opacity: 0.4;
-}
-
-/* ===== SECTION ENTRY FEEL ===== */
-.section-visible {
-  will-change: transform, opacity;
-}
-
-/* ===== LOADER UPGRADE ===== */
-.spinner {
-  box-shadow:
-    0 0 20px rgba(255,255,255,0.15),
-    inset 0 0 10px rgba(255,255,255,0.05);
-}
-
-/* ===== PROGRESS BAR GLOW ===== */
-#progressBar {
-  box-shadow: 0 0 12px rgba(255,255,255,0.25);
-}
-
-/* ===== READY BOX POP ===== */
-#readyBox {
-  animation: readyPop 0.4s ease;
-}
-
-@keyframes readyPop {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
+  body {
+    font-size: 15px;
+    letter-spacing: 0.2px;
+    -webkit-tap-highlight-color: transparent;
   }
-  to {
-    transform: scale(1);
-    opacity: 1;
+
+  /* smoother scroll feel */
+  html {
+    scroll-behavior: smooth;
   }
+
+  /* -------------------------
+     GLASS (OPTIMIZED)
+  ------------------------- */
+
+  .glass,
+  .glass-strong {
+    backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* reduce heavy animations */
+  .glass::after,
+  .glass-strong::after {
+    animation: none !important;
+    opacity: 0.06;
+  }
+
+  /* -------------------------
+     TOUCH FEEDBACK
+  ------------------------- */
+
+  button,
+  a {
+    transition: transform 0.12s ease, background 0.2s ease;
+  }
+
+  button:active,
+  a:active {
+    transform: scale(0.96);
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* -------------------------
+     NAV = APP-LIKE
+  ------------------------- */
+
+  .nav-link {
+    border-radius: 14px;
+    font-size: 14px;
+  }
+
+  .nav-link.active-link {
+    background: rgba(96,165,250,0.12);
+    border: 1px solid rgba(96,165,250,0.25);
+    box-shadow: 0 0 12px rgba(96,165,250,0.2);
+  }
+
+  /* -------------------------
+     CARDS = FLOATING UI
+  ------------------------- */
+
+  .soft-pop {
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .soft-pop:active {
+    transform: scale(0.97);
+  }
+
+  /* subtle depth */
+  .soft-pop {
+    box-shadow: 
+      0 4px 12px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  /* -------------------------
+     COMMAND BOX (TERMINAL FEEL)
+  ------------------------- */
+
+  .command {
+    font-size: 13px;
+    line-height: 1.5;
+    border-radius: 16px;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.9),
+      rgba(0,0,0,0.7)
+    );
+  }
+
+  /* glow edges */
+  .command::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 20px rgba(0,255,100,0.08);
+    pointer-events: none;
+  }
+
+  /* -------------------------
+     LOADER = PREMIUM FEEL
+  ------------------------- */
+
+  #loader {
+    backdrop-filter: blur(8px);
+  }
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border-width: 3px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.2);
+  }
+
+  /* breathing glow */
+  #loader::after {
+    content: "";
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(96,165,250,0.15), transparent);
+    border-radius: 50%;
+    animation: mobileBreathe 2.2s ease-in-out infinite;
+  }
+
+  @keyframes mobileBreathe {
+    0%,100% { transform: scale(0.9); opacity: 0.4; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  /* -------------------------
+     PROGRESS BAR SMOOTH
+  ------------------------- */
+
+  #progressBar {
+    transition: width 0.25s ease-out !important;
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
+  }
+
+  /* -------------------------
+     TEXT READABILITY BOOST
+  ------------------------- */
+
+  p {
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+  }
+
+  h1, h2, h3 {
+    letter-spacing: 0.4px;
+  }
+
+  /* -------------------------
+     MOBILE TOPBAR = STICKY APP BAR
+  ------------------------- */
+
+  .md\\:hidden {
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  }
+
+  /* -------------------------
+     SCROLL SNAP (FEELS LIKE APP)
+  ------------------------- */
+
+  main {
+    scroll-snap-type: y proximity;
+  }
+
+  section {
+    scroll-snap-align: start;
+  }
+
 }
 
-/* ===== TEXT POLISH ===== */
-h1, h2, h3 {
-  letter-spacing: -0.02em;
-}
+/* =========================
+   EXTRA SMALL DEVICES
+   ========================= */
 
-p {
-  line-height: 1.65;
-}
+@media (max-width: 420px) {
 
-/* ===== SCROLLBAR (SAFE) ===== */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.2) transparent;
-}
+  body {
+    font-size: 14px;
+  }
 
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+  .glass {
+    padding: 1rem !important;
+  }
 
-*::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
-  border-radius: 999px;
-}
+  .command {
+    font-size: 12px;
+  }
 
-*::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.25);
-}
+  h2 {
+    font-size: 1.6rem;
+  }
 
-/* ===== MICRO INTERACTIONS ===== */
-
-/* tiny lift on all cards */
-.soft-pop:hover {
-  box-shadow: 0 15px 50px rgba(0,0,0,0.3);
-}
-
-/* subtle click feel */
-button:active,
-a:active {
-  transform: scale(0.97);
 }
