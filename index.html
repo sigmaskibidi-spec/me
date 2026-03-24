@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arch Linux Install Guide</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/framer-motion@10/dist/framer-motion.js"></script>
+
+<style>
+html { scroll-behavior: smooth; }
+
+body {
+  background: radial-gradient(circle at top, #111, #000);
+}
+
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.nav-link {
+  transition: all 0.25s ease;
+}
+
+.nav-link:hover {
+  color: white;
+  transform: translateX(6px);
+}
+
+.active {
+  color: white;
+  font-weight: 600;
+}
+</style>
+</head>
+
+<body class="text-white flex">
+
+<!-- Sidebar -->
+<aside class="w-64 h-screen glass fixed p-6">
+<h1 class="text-2xl font-bold mb-8">Arch Docs ⚡</h1>
+
+<nav class="space-y-3 text-gray-400">
+<a href="#about" class="nav-link block">About this site</a>
+<a href="#install" class="nav-link block">Installation</a>
+<a href="#postinstall" class="nav-link block">Post Install</a>
+<a href="#faq" class="nav-link block">FAQ</a>
+</nav>
+</aside>
+
+<!-- Content -->
+<main class="ml-64 p-10 max-w-4xl space-y-24">
+
+<section id="about" class="animate-section">
+<h2 class="text-4xl font-bold mb-4">About this website</h2>
+<p class="text-gray-400">
+A modern Arch Linux installation guide designed to be simple,
+fast and clean.
+</p>
+</section>
+
+<section id="install" class="animate-section">
+<h2 class="text-4xl font-bold mb-8">Installation</h2>
+
+<div class="space-y-6">
+
+<div class="glass p-6 rounded-2xl hover:scale-[1.02] transition">
+<h3 class="font-semibold mb-2">Boot the ISO</h3>
+<p class="text-gray-400">Use a bootable USB drive.</p>
+</div>
+
+<div class="glass p-6 rounded-2xl hover:scale-[1.02] transition">
+<h3 class="font-semibold mb-3">Connect Internet</h3>
+
+<div class="relative">
+<pre class="bg-black p-4 rounded-xl text-sm overflow-x-auto">ping archlinux.org</pre>
+<button onclick="copyCommand(this)" class="absolute right-3 top-3 text-xs bg-white/10 px-2 py-1 rounded">
+copy
+</button>
+</div>
+
+</div>
+
+<div class="glass p-6 rounded-2xl hover:scale-[1.02] transition">
+<h3 class="font-semibold mb-3">Partition disk</h3>
+
+<div class="relative">
+<pre class="bg-black p-4 rounded-xl text-sm">cfdisk</pre>
+<button onclick="copyCommand(this)" class="absolute right-3 top-3 text-xs bg-white/10 px-2 py-1 rounded">
+copy
+</button>
+</div>
+
+</div>
+
+<div class="glass p-6 rounded-2xl hover:scale-[1.02] transition">
+<h3 class="font-semibold mb-3">Install base system</h3>
+
+<div class="relative">
+<pre class="bg-black p-4 rounded-xl text-sm">pacstrap /mnt base linux linux-firmware</pre>
+<button onclick="copyCommand(this)" class="absolute right-3 top-3 text-xs bg-white/10 px-2 py-1 rounded">
+copy
+</button>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section id="postinstall" class="animate-section">
+<h2 class="text-4xl font-bold mb-6">Post Install</h2>
+<p class="text-gray-400">
+After installation you can install Hyprland, drivers,
+and configure your system.
+</p>
+</section>
+
+<section id="faq" class="animate-section">
+<h2 class="text-4xl font-bold mb-6">FAQ</h2>
+
+<div class="space-y-4">
+<div>
+<h3 class="font-semibold">Is Arch beginner friendly?</h3>
+<p class="text-gray-400">It teaches Linux very fast.</p>
+</div>
+
+<div>
+<h3 class="font-semibold">Will I break my system?</h3>
+<p class="text-gray-400">Probably at least once 😏</p>
+</div>
+</div>
+
+</section>
+
+</main>
+
+<script>
+
+// Scroll animation
+const sections = document.querySelectorAll(".animate-section");
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = 1;
+      entry.target.style.transform = "translateY(0)";
+    }
+  });
+});
+
+sections.forEach(section => {
+  section.style.opacity = 0;
+  section.style.transform = "translateY(30px)";
+  section.style.transition = "all 0.7s ease";
+  observer.observe(section);
+});
+
+// Active sidebar highlight
+const links = document.querySelectorAll(".nav-link");
+
+window.addEventListener("scroll", () => {
+  let fromTop = window.scrollY;
+
+  links.forEach(link => {
+    let section = document.querySelector(link.getAttribute("href"));
+
+    if (
+      section.offsetTop <= fromTop + 200 &&
+      section.offsetTop + section.offsetHeight > fromTop + 200
+    ) {
+      links.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
+    }
+  });
+});
+
+// Copy button
+function copyCommand(btn) {
+  const code = btn.parentElement.querySelector("pre").innerText;
+  navigator.clipboard.writeText(code);
+  btn.innerText = "copied!";
+  setTimeout(() => btn.innerText = "copy", 1500);
+}
+
+</script>
+
+</body>
+  </html>
