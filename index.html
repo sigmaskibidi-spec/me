@@ -213,104 +213,89 @@
         </p>  
       </div>  
     </section>  
+<section id="install" class="section-hidden">
+  <h2 class="mb-6 text-3xl sm:text-4xl font-bold">Installation (archinstall)</h2>
 
-    <section id="install" class="section-hidden">  
-      <h2 class="mb-6 text-3xl sm:text-4xl font-bold">Installation</h2>  
+  <div class="glass rounded-3xl p-6 mb-6">
+    <p class="text-gray-300 leading-7">
+      This uses Arch’s guided installer. It is the easiest way to install Arch Linux without doing every part by hand.
+      Just open the menu, choose the options below, and let it run.
+    </p>
+  </div>
 
-      <div class="space-y-5">  
-        <div class="glass rounded-3xl p-6 soft-pop">  
-          <h3 class="text-xl font-semibold">1. Boot the Arch ISO</h3>  
-          <p class="mt-2 text-gray-400">Put the USB in. Start the computer. Choose the Arch USB.</p>  
-        </div>  
+  <div class="space-y-5">
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">1. Start the installer</h3>
+      <p class="mt-2 text-gray-400">After booting into the Arch ISO, type this:</p>
+      <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">archinstall</pre>
+    </div>
 
-        <div class="glass rounded-3xl p-6 soft-pop">  
-          <div class="flex items-center justify-between gap-4">  
-            <h3 class="text-xl font-semibold">2. Check internet</h3>  
-            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="ping archlinux.org">  
-              copy  
-            </button>  
-          </div>  
-          <p class="mt-2 text-gray-400">This just checks if the internet is alive.</p>  
-          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">ping archlinux.org</pre>  
-        </div>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">2. Choose language</h3>
+      <p class="mt-2 text-gray-400">
+        Pick English unless you want another language. This changes the installer menu language only.
+      </p>
+    </div>
 
-        <div class="glass rounded-3xl p-6 soft-pop">  
-          <div class="flex items-center justify-between gap-4">  
-            <h3 class="text-xl font-semibold">3. Open the disk tool</h3>  
-            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="cfdisk">  
-              copy  
-            </button>  
-          </div>  
-          <p class="mt-2 text-gray-400">This is where you make space for Arch.</p>  
-          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">cfdisk</pre>  
-        </div>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">3. Pick mirrors</h3>
+      <p class="mt-2 text-gray-400">
+        Select your country or the closest region so downloads are faster.
+      </p>
+    </div>
 
-        <div class="glass rounded-3xl p-6 soft-pop">  
-          <div class="flex items-center justify-between gap-4">  
-            <h3 class="text-xl font-semibold">4. Install the base system</h3>  
-            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="pacstrap /mnt base linux linux-firmware">  
-              copy  
-            </button>  
-          </div>  
-          <p class="mt-2 text-gray-400">This puts the first important Arch files onto the disk.</p>  
-          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">pacstrap /mnt base linux linux-firmware</pre>  
-        </div>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">4. Choose the disk</h3>
+      <p class="mt-2 text-gray-400">
+        Select the drive where Arch will be installed. Be careful here, because this can erase data on that drive.
+      </p>
+    </div>
 
-        <div class="glass rounded-3xl p-6 soft-pop">  
-          <div class="flex items-center justify-between gap-4">  
-            <h3 class="text-xl font-semibold">5. Save the disk map</h3>  
-            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="genfstab -U /mnt >> /mnt/etc/fstab">  
-              copy  
-            </button>  
-          </div>  
-          <p class="mt-2 text-gray-400">This tells Arch where everything lives.</p>  
-          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">genfstab -U /mnt >> /mnt/etc/fstab</pre>  
-        </div>  
-      </div>  
-    </section>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">5. Pick partition layout</h3>
+      <p class="mt-2 text-gray-400">
+        Use a simple guided layout. If it asks for a filesystem, ext4 is the easiest choice for most people.
+      </p>
+    </div>
 
-    <section id="postinstall" class="section-hidden hidden">  
-      <div class="glass rounded-3xl p-6 sm:p-8 border border-white/10">  
-        <div class="flex items-center justify-between gap-4 flex-wrap">  
-          <div>  
-            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">  
-              <span class="h-2 w-2 rounded-full bg-white"></span>  
-              Unlocked section  
-            </div>  
-            <h2 class="mt-5 text-3xl sm:text-4xl font-bold">Post Installation</h2>  
-          </div>  
-          <div class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">  
-            click-to-unlock tab  
-          </div>  
-        </div>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">6. Choose profile</h3>
+      <p class="mt-2 text-gray-400">
+        Pick a desktop profile if you want a normal graphical system. If you want a lighter setup, choose minimal.
+      </p>
+    </div>
 
-        <p class="mt-4 max-w-3xl text-gray-400 leading-7">  
-          This part is for after Arch is already installed. Think of it like:  
-          “Okay, the house exists. Now we make it comfy.”  
-        </p>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">7. Set username and password</h3>
+      <p class="mt-2 text-gray-400">
+        Create your user account and password when the installer asks.
+      </p>
+    </div>
 
-        <div class="mt-6 space-y-5">  
-          <div class="glass rounded-2xl p-5 soft-pop">  
-            <h3 class="font-semibold">Step 1: Pick your desktop or window manager</h3>  
-            <p class="mt-2 text-gray-400">This is the thing you actually look at when the computer starts.</p>  
-          </div>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">8. Review everything</h3>
+      <p class="mt-2 text-gray-400">
+        Check the summary carefully before installing. This is the last chance to catch mistakes.
+      </p>
+    </div>
 
-          <div class="glass rounded-2xl p-5 soft-pop">  
-            <h3 class="font-semibold">Step 2: Add drivers and updates</h3>  
-            <p class="mt-2 text-gray-400">This helps the computer work properly and stay fresh.</p>  
-          </div>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">9. Install</h3>
+      <p class="mt-2 text-gray-400">
+        Press install and wait until it finishes.
+      </p>
+    </div>
 
-          <div class="glass rounded-2xl p-5 soft-pop">  
-            <h3 class="font-semibold">Step 3: Optional easy Hyprland setup</h3>  
-            <p class="mt-2 text-gray-400">  
-              If you want a clean no setup required hyprland setup, run  
-              <span class="font-mono text-white"> &lt;(curl -s https://ml4w.com/os/stable)</span>  
-              on your fresh system. <span class="text-gray-500">(Optional)</span>  
-            </p>  
-          </div>  
-        </div>  
-      </div>  
-    </section>  
+    <div class="glass rounded-3xl p-6 soft-pop">
+      <h3 class="text-xl font-semibold">10. Reboot</h3>
+      <p class="mt-2 text-gray-400">
+        When the installer is done, reboot the system and remove the USB.
+      </p>
+      <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">reboot</pre>
+    </div>
+  </div>
+</section>
+ 
 
     <section id="faq" class="section-hidden">  
       <h2 class="mb-6 text-3xl sm:text-4xl font-bold">FAQ</h2>  
