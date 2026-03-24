@@ -10,20 +10,20 @@
 
     body {
       background:
-        radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.10), transparent 30%),
+        radial-gradient(circle at top, rgba(59, 130, 246, 0.14), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.12), transparent 30%),
         #050505;
     }
 
     .glass {
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .glass-strong {
       background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(18px);
+      backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.10);
     }
 
@@ -55,6 +55,8 @@
 
     .soft-pop {
       transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     .soft-pop:hover {
@@ -63,9 +65,23 @@
       border-color: rgba(255, 255, 255, 0.14);
     }
 
+    .soft-pop::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .soft-pop:hover::after {
+      opacity: 1;
+    }
+
     .spinner {
-      width: 78px;
-      height: 78px;
+      width: 84px;
+      height: 84px;
       border-radius: 9999px;
       border: 4px solid rgba(255,255,255,0.10);
       border-top-color: rgba(255,255,255,0.95);
@@ -127,9 +143,7 @@
           Detected platform:
           <span id="platformName" class="text-white font-medium">detecting...</span>
         </p>
-        <p id="interfaceText" class="text-gray-500">
-          Loading interface...
-        </p>
+        <p id="interfaceText" class="text-gray-500">Loading interface...</p>
       </div>
 
       <div class="w-full max-w-md space-y-2">
@@ -186,7 +200,7 @@
 
     <!-- Content -->
     <main class="content-desktop ml-72 min-h-screen px-4 py-6 sm:px-6 lg:px-10">
-      <!-- Mobile mini topbar -->
+      <!-- Mobile topbar -->
       <div class="md:hidden glass-strong rounded-2xl p-4 mb-6 sticky top-4 z-30">
         <div class="flex items-center justify-between">
           <div>
@@ -226,7 +240,14 @@
         </section>
 
         <section id="install" class="section-hidden">
-          <h2 class="mb-6 text-3xl sm:text-4xl font-bold">Installation</h2>
+          <h2 class="mb-6 text-3xl sm:text-4xl font-bold">Installation with archinstall</h2>
+
+          <div class="glass rounded-3xl p-6 mb-6">
+            <p class="text-gray-300 leading-7">
+              This section is made for normal people, not command-line wizards.
+              <span class="text-white font-semibold">archinstall</span> is the guided installer shipped with Arch Linux, so you follow a menu instead of doing everything by hand. 1
+            </p>
+          </div>
 
           <div class="space-y-5">
             <div class="glass rounded-3xl p-6 soft-pop">
@@ -236,46 +257,69 @@
 
             <div class="glass rounded-3xl p-6 soft-pop">
               <div class="flex items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold">2. Check internet</h3>
-                <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="ping archlinux.org">
-                  copy
-                </button>
+                <h3 class="text-xl font-semibold">2. Start the guided installer</h3>
+                <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="archinstall">copy</button>
               </div>
-              <p class="mt-2 text-gray-400">This just checks if the internet is alive.</p>
-              <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">ping archlinux.org</pre>
+              <p class="mt-2 text-gray-400">
+                This opens the guided installer. Use the arrow keys, Enter, and the menu.
+              </p>
+              <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">archinstall</pre>
             </div>
 
             <div class="glass rounded-3xl p-6 soft-pop">
-              <div class="flex items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold">3. Open the disk tool</h3>
-                <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="cfdisk">
-                  copy
-                </button>
-              </div>
-              <p class="mt-2 text-gray-400">This is where you make space for Arch.</p>
-              <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">cfdisk</pre>
+              <h3 class="text-xl font-semibold">3. Choose language</h3>
+              <p class="mt-2 text-gray-400">
+                Pick English if you want the simplest path. This just changes the menu language.
+              </p>
             </div>
 
             <div class="glass rounded-3xl p-6 soft-pop">
-              <div class="flex items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold">4. Install the base system</h3>
-                <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="pacstrap /mnt base linux linux-firmware">
-                  copy
-                </button>
-              </div>
-              <p class="mt-2 text-gray-400">This puts the first important Arch files onto the disk.</p>
-              <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">pacstrap /mnt base linux linux-firmware</pre>
+              <h3 class="text-xl font-semibold">4. Set mirrors</h3>
+              <p class="mt-2 text-gray-400">
+                Pick your country or closest region. This helps downloads feel less slow.
+              </p>
             </div>
 
             <div class="glass rounded-3xl p-6 soft-pop">
-              <div class="flex items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold">5. Save the disk map</h3>
-                <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="genfstab -U /mnt >> /mnt/etc/fstab">
-                  copy
-                </button>
-              </div>
-              <p class="mt-2 text-gray-400">This tells Arch where everything lives.</p>
-              <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">genfstab -U /mnt >> /mnt/etc/fstab</pre>
+              <h3 class="text-xl font-semibold">5. Choose the disk</h3>
+              <p class="mt-2 text-gray-400">
+                Select the drive you want Arch installed on. Be careful here — this is the part that can erase data.
+              </p>
+            </div>
+
+            <div class="glass rounded-3xl p-6 soft-pop">
+              <h3 class="text-xl font-semibold">6. Pick a partition layout</h3>
+              <p class="mt-2 text-gray-400">
+                For a simple install, use the guided layout options and choose a filesystem like ext4 if offered.
+              </p>
+            </div>
+
+            <div class="glass rounded-3xl p-6 soft-pop">
+              <h3 class="text-xl font-semibold">7. Pick a profile</h3>
+              <p class="mt-2 text-gray-400">
+                Choose a desktop profile if you want a normal graphical system, or keep it minimal if you prefer a plain setup.
+              </p>
+            </div>
+
+            <div class="glass rounded-3xl p-6 soft-pop">
+              <h3 class="text-xl font-semibold">8. Set user and password</h3>
+              <p class="mt-2 text-gray-400">
+                Create your username, password, and any admin/root options the menu asks for.
+              </p>
+            </div>
+
+            <div class="glass rounded-3xl p-6 soft-pop">
+              <h3 class="text-xl font-semibold">9. Confirm and install</h3>
+              <p class="mt-2 text-gray-400">
+                Review the summary first. If everything looks right, begin the install and wait for it to finish.
+              </p>
+            </div>
+
+            <div class="glass rounded-3xl p-6 soft-pop">
+              <h3 class="text-xl font-semibold">10. Reboot</h3>
+              <p class="mt-2 text-gray-400">
+                When it says the install is done, reboot the machine and remove the USB.
+              </p>
             </div>
           </div>
         </section>
@@ -296,8 +340,8 @@
             </div>
 
             <p class="mt-4 max-w-3xl text-gray-400 leading-7">
-              This part is for after Arch is already installed. Think of it like:
-              “Okay, the house exists. Now we make it comfy.”
+              This is for after Arch is already installed. Think of it like:
+              “The computer works. Now we make it comfy.”
             </p>
 
             <div class="mt-6 space-y-5">
@@ -315,7 +359,7 @@
                 <h3 class="font-semibold">Step 3: Optional easy Hyprland setup</h3>
                 <p class="mt-2 text-gray-400">
                   If you want a clean no setup required hyprland setup, run
-                  <span class="font-mono text-white"> &lt;(curl -s https://ml4w.com/os/stable)</span>
+                  <span class="font-mono text-white">&lt;(curl -s https://ml4w.com/os/stable)</span>
                   on your fresh system. <span class="text-gray-500">(Optional)</span>
                 </p>
               </div>
@@ -328,8 +372,10 @@
 
           <div class="space-y-4">
             <div class="glass rounded-2xl p-5 soft-pop">
-              <h3 class="font-semibold">What is Arch?</h3>
-              <p class="mt-2 text-gray-400">A Linux system you build step by step.</p>
+              <h3 class="font-semibold">What is Archinstall?</h3>
+              <p class="mt-2 text-gray-400">
+                It is Arch Linux’s guided installer, meant to make installation simpler than doing everything manually. 2
+              </p>
             </div>
 
             <div class="glass rounded-2xl p-5 soft-pop">
@@ -406,7 +452,6 @@
       lockStateMobile.textContent = "open";
       postInstallTab.classList.add("active-link");
       postInstallTabMobile.classList.add("active-link");
-
       setTimeout(() => scrollToSection("postinstall"), 150);
     }
 
@@ -465,49 +510,6 @@
 
     sections.forEach((section) => observer.observe(section));
     window.addEventListener("scroll", updateActiveLinks);
-    window.addEventListener("resize", setPlatformUI);
-
-    // Loading animation:
-    // 1) show platform
-    // 2) wait 5 seconds total
-    // 3) green detected state
-    // 4) slow-at-first, then fast progress bar
-    setPlatformUI();
-
-    const totalLoadMs = 5000;
-    const start = performance.now();
-    let greenShown = false;
-
-    function easeSlowThenFast(t) {
-      // starts slow, ends fast
-      return t * t * t;
-    }
-
-    function tick(now) {
-      const elapsed = now - start;
-      const raw = Math.min(elapsed / totalLoadMs, 1);
-      const eased = easeSlowThenFast(raw);
-      const percent = Math.min(100, Math.round(eased * 100));
-
-      progressBar.style.width = percent + "%";
-      progressLabel.textContent = percent + "%";
-
-      if (elapsed > 1800 && !greenShown) {
-        greenShown = true;
-        readyBox.classList.remove("hidden");
-      }
-
-      if (raw < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        progressBar.style.width = "100%";
-        progressLabel.textContent = "100%";
-        setTimeout(revealApp, 400);
-      }
-    }
-
-    requestAnimationFrame(tick);
-    updateActiveLinks();
-  </script>
+    </script>
 </body>
 </html>
