@@ -1,121 +1,500 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arch Linux Guide</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>Arch Linux Install Guide</title>  
+  <script src="https://cdn.tailwindcss.com"></script>  
+  <style>  
+    html { scroll-behavior: smooth; }  body {  
+  background:  
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 35%),  
+    radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.10), transparent 30%),  
+    #050505;  
+}  
 
-<style>
-body {
-  background: #050505;
+.glass {  
+  background: rgba(255, 255, 255, 0.05);  
+  backdrop-filter: blur(16px);  
+  border: 1px solid rgba(255, 255, 255, 0.08);  
+}  
+
+.glass-strong {  
+  background: rgba(255, 255, 255, 0.07);  
+  backdrop-filter: blur(18px);  
+  border: 1px solid rgba(255, 255, 255, 0.10);  
+}  
+
+.nav-link {  
+  transition: all 0.25s ease;  
+}  
+
+.nav-link:hover {  
+  transform: translateX(6px);  
+  color: white;  
+}  
+
+.active-link {  
+  color: white;  
+  background: rgba(255, 255, 255, 0.08);  
+  border-color: rgba(255, 255, 255, 0.15);  
+}  
+
+.section-hidden {  
+  opacity: 0;  
+  transform: translateY(24px);  
+}  
+
+.section-visible {  
+  opacity: 1;  
+  transform: translateY(0);  
+  transition: all 0.7s ease;  
+}  
+
+.soft-pop {  
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;  
+}  
+
+.soft-pop:hover {  
+  transform: translateY(-2px) scale(1.01);  
+  background: rgba(255, 255, 255, 0.08);  
+  border-color: rgba(255, 255, 255, 0.14);  
+}  
+
+.spinner {  
+  width: 78px;  
+  height: 78px;  
+  border-radius: 9999px;  
+  border: 4px solid rgba(255,255,255,0.10);  
+  border-top-color: rgba(255,255,255,0.95);  
+  animation: spin 1s linear infinite;  
+}  
+
+@keyframes spin {  
+  to { transform: rotate(360deg); }  
+}  
+
+.pulse-dot {  
+  animation: pulse 1.5s ease-in-out infinite;  
+}  
+
+@keyframes pulse {  
+  0%, 100% { opacity: 0.45; transform: scale(0.96); }  
+  50% { opacity: 1; transform: scale(1); }  
+}  
+
+.command {  
+  overflow-x: auto;  
+  white-space: pre;  
+  scrollbar-width: thin;  
+}  
+
+@media (max-width: 767px) {  
+  .sidebar-desktop {  
+    position: static !important;  
+    width: 100% !important;  
+    height: auto !important;  
+    border-right: none !important;  
+    border-bottom: 1px solid rgba(255,255,255,0.08);  
+  }  
+
+  .content-desktop {  
+    margin-left: 0 !important;  
+  }  
 }
 
-.glass {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-}
+  </style>  
+</head>  
+<body class="text-white overflow-x-hidden">    <!-- Loading screen -->    <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-black">  
+    <div class="absolute inset-0 opacity-40"  
+         style="background:  
+           radial-gradient(circle at center, rgba(255,255,255,0.07), transparent 35%),  
+           radial-gradient(circle at top right, rgba(59,130,246,0.16), transparent 20%),  
+           radial-gradient(circle at bottom left, rgba(168,85,247,0.14), transparent 18%);">  
+    </div>  <div class="relative z-10 flex w-full max-w-xl flex-col items-center gap-6 px-6 text-center">  
+  <div class="spinner"></div>  
 
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid rgba(255,255,255,0.1);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
+  <div class="space-y-2">  
+    <div class="text-xs tracking-[0.35em] uppercase text-gray-400">Initializing guide</div>  
+    <h1 class="text-2xl sm:text-3xl font-semibold">Arch Linux Install Guide</h1>  
+    <p class="text-gray-400">  
+      Detected platform:  
+      <span id="platformName" class="text-white font-medium">detecting...</span>  
+    </p>  
+    <p id="interfaceText" class="text-gray-500">  
+      Loading interface...  
+    </p>  
+  </div>  
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-</style>
-</head>
+  <div class="w-full max-w-md space-y-2">  
+    <div class="flex items-center justify-between text-xs text-gray-500">  
+      <span>Loading</span>  
+      <span id="progressLabel">0%</span>  
+    </div>  
 
-<body class="text-white">
+    <div class="h-3 w-full overflow-hidden rounded-full bg-white/10">  
+      <div id="progressBar" class="h-full w-0 rounded-full bg-white transition-[width] duration-100 ease-linear"></div>  
+    </div>  
+  </div>  
 
-<!-- LOADER -->
-<div id="loader" class="fixed inset-0 flex flex-col items-center justify-center bg-black z-50 gap-4">
-  <div class="spinner"></div>
-  <p>Detecting platform: <span id="platform">...</span></p>
+  <div id="readyBox" class="hidden rounded-2xl border border-green-400/20 bg-green-400/10 px-4 py-3 text-sm text-green-300">  
+    Detected platform: <span id="platformGreen" class="font-semibold">mobile</span> — ready  
+  </div>  
 
-  <div class="w-64 h-2 bg-white/10 rounded">
-    <div id="bar" class="h-full bg-white w-0"></div>
-  </div>
+  <div class="flex items-center gap-2 text-xs text-gray-500">  
+    <span class="h-2 w-2 rounded-full bg-white pulse-dot"></span>  
+    <span>Making everything feel smooth</span>  
+  </div>  
 </div>
 
-<!-- APP -->
-<div id="app" class="hidden p-6 max-w-3xl mx-auto space-y-10">
+  </div>    <!-- App -->    <div id="app" class="opacity-0 transition-opacity duration-500">  
+    <!-- Sidebar -->  
+    <aside class="sidebar-desktop fixed left-0 top-0 h-screen w-72 glass-strong p-6 flex flex-col justify-between">  
+      <div>  
+        <div class="mb-8">  
+          <div class="text-xs uppercase tracking-[0.32em] text-gray-500">Arch Docs</div>  
+          <h1 class="mt-2 text-2xl font-bold">Arch Guide ⚡</h1>  
+          <p class="mt-2 text-sm text-gray-400">Simple words. Big clarity.</p>  
+        </div>  <nav class="space-y-2">  
+      <a href="#about" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-gray-400">About this website</a>  
+      <a href="#install" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-gray-400">Installation</a>  
+      <button id="postInstallTab" class="nav-link w-full text-left rounded-xl border border-transparent px-3 py-2 text-gray-400 flex items-center justify-between">  
+        <span>Post Installation</span>  
+        <span id="lockState" class="text-xs text-gray-500">locked</span>  
+      </button>  
+      <a href="#faq" class="nav-link block rounded-xl border border-transparent px-3 py-2 text-gray-400">FAQ</a>  
+    </nav>  
+  </div>  
 
-  <h1 class="text-3xl font-bold">Arch Linux Install Guide ⚡</h1>
+  <div class="glass rounded-2xl p-4 text-sm text-gray-400">  
+    <div class="flex items-center justify-between">  
+      <span>Platform mode</span>  
+      <span id="modeBadge" class="text-white">mobile</span>  
+    </div>  
+  </div>  
+</aside>  
 
-  <!-- INSTALL -->
-  <div class="glass p-6 rounded-xl space-y-4">
-    <h2 class="text-xl font-semibold">Easy Installation (archinstall)</h2>
+<!-- Content -->  
+<main class="content-desktop ml-72 min-h-screen px-4 py-6 sm:px-6 lg:px-10">  
+  <!-- Mobile mini topbar -->  
+  <div class="md:hidden glass-strong rounded-2xl p-4 mb-6 sticky top-4 z-30">  
+    <div class="flex items-center justify-between">  
+      <div>  
+        <div class="text-xs uppercase tracking-[0.3em] text-gray-500">Arch Docs</div>  
+        <div class="text-lg font-bold">Arch Guide ⚡</div>  
+      </div>  
+      <div class="text-right">  
+        <div class="text-xs text-gray-500">Mode</div>  
+        <div id="mobileModeBadge" class="text-sm text-white">mobile</div>  
+      </div>  
+    </div>  
 
-    <p>We use the built-in installer. No hard commands.</p>
+    <div class="mt-4 grid grid-cols-2 gap-2 text-sm">  
+      <a href="#about" class="rounded-xl glass px-3 py-2 text-center text-gray-300">About</a>  
+      <a href="#install" class="rounded-xl glass px-3 py-2 text-center text-gray-300">Install</a>  
+      <button id="postInstallTabMobile" class="rounded-xl glass px-3 py-2 text-center text-gray-300 flex items-center justify-center gap-2">  
+        <span>Post Install</span>  
+        <span class="text-xs text-gray-500" id="lockStateMobile">locked</span>  
+      </button>  
+      <a href="#faq" class="rounded-xl glass px-3 py-2 text-center text-gray-300">FAQ</a>  
+    </div>  
+  </div>  
 
-    <div class="bg-black p-3 rounded">archinstall</div>
+  <div class="mx-auto max-w-4xl space-y-20 pb-20">  
+    <section id="about" class="section-hidden">  
+      <div class="glass rounded-3xl p-6 sm:p-8">  
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">  
+          <span class="h-2 w-2 rounded-full bg-white"></span>  
+          About this website  
+        </div>  
+        <h2 class="mt-5 text-3xl sm:text-4xl font-bold">A docs-style Arch Linux install guide</h2>  
+        <p class="mt-4 max-w-2xl text-gray-400 leading-7">  
+          This site explains Arch Linux like a really patient person would.  
+          Short steps. Easy words. No confusing wall of text.  
+        </p>  
+      </div>  
+    </section>  
 
-    <ul class="list-disc ml-5 text-gray-300">
-      <li>Choose language</li>
-      <li>Select mirrors (your country)</li>
-      <li>Pick your disk</li>
-      <li>Choose filesystem (ext4)</li>
-      <li>Select desktop (optional)</li>
-      <li>Create user + password</li>
-      <li>Install and wait</li>
-    </ul>
-  </div>
+    <section id="install" class="section-hidden">  
+      <h2 class="mb-6 text-3xl sm:text-4xl font-bold">Installation</h2>  
 
-  <!-- POST INSTALL -->
-  <div class="glass p-6 rounded-xl space-y-4">
-    <h2 class="text-xl font-semibold">Post Installation</h2>
+      <div class="space-y-5">  
+        <div class="glass rounded-3xl p-6 soft-pop">  
+          <h3 class="text-xl font-semibold">1. Boot the Arch ISO</h3>  
+          <p class="mt-2 text-gray-400">Put the USB in. Start the computer. Choose the Arch USB.</p>  
+        </div>  
 
-    <p>If you want a clean no setup required hyprland setup:</p>
+        <div class="glass rounded-3xl p-6 soft-pop">  
+          <div class="flex items-center justify-between gap-4">  
+            <h3 class="text-xl font-semibold">2. Check internet</h3>  
+            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="ping archlinux.org">  
+              copy  
+            </button>  
+          </div>  
+          <p class="mt-2 text-gray-400">This just checks if the internet is alive.</p>  
+          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">ping archlinux.org</pre>  
+        </div>  
 
-    <div class="bg-black p-3 rounded">
-      &lt;(curl -s https://ml4w.com/os/stable)
-    </div>
-  </div>
+        <div class="glass rounded-3xl p-6 soft-pop">  
+          <div class="flex items-center justify-between gap-4">  
+            <h3 class="text-xl font-semibold">3. Open the disk tool</h3>  
+            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="cfdisk">  
+              copy  
+            </button>  
+          </div>  
+          <p class="mt-2 text-gray-400">This is where you make space for Arch.</p>  
+          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">cfdisk</pre>  
+        </div>  
 
-</div>
+        <div class="glass rounded-3xl p-6 soft-pop">  
+          <div class="flex items-center justify-between gap-4">  
+            <h3 class="text-xl font-semibold">4. Install the base system</h3>  
+            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="pacstrap /mnt base linux linux-firmware">  
+              copy  
+            </button>  
+          </div>  
+          <p class="mt-2 text-gray-400">This puts the first important Arch files onto the disk.</p>  
+          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">pacstrap /mnt base linux linux-firmware</pre>  
+        </div>  
 
-<script>
-const loader = document.getElementById("loader");
-const app = document.getElementById("app");
-const bar = document.getElementById("bar");
-const platformText = document.getElementById("platform");
+        <div class="glass rounded-3xl p-6 soft-pop">  
+          <div class="flex items-center justify-between gap-4">  
+            <h3 class="text-xl font-semibold">5. Save the disk map</h3>  
+            <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="genfstab -U /mnt >> /mnt/etc/fstab">  
+              copy  
+            </button>  
+          </div>  
+          <p class="mt-2 text-gray-400">This tells Arch where everything lives.</p>  
+          <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">genfstab -U /mnt >> /mnt/etc/fstab</pre>  
+        </div>  
+      </div>  
+    </section>  
 
-/* SIMPLE DETECTION */
-const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
-const platform = isMobile ? "mobile" : "pc";
+    <section id="postinstall" class="section-hidden hidden">  
+      <div class="glass rounded-3xl p-6 sm:p-8 border border-white/10">  
+        <div class="flex items-center justify-between gap-4 flex-wrap">  
+          <div>  
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">  
+              <span class="h-2 w-2 rounded-full bg-white"></span>  
+              Unlocked section  
+            </div>  
+            <h2 class="mt-5 text-3xl sm:text-4xl font-bold">Post Installation</h2>  
+          </div>  
+          <div class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">  
+            click-to-unlock tab  
+          </div>  
+        </div>  
 
-platformText.textContent = platform;
+        <p class="mt-4 max-w-3xl text-gray-400 leading-7">  
+          This part is for after Arch is already installed. Think of it like:  
+          “Okay, the house exists. Now we make it comfy.”  
+        </p>  
 
-/* LOADING ANIMATION (CANNOT BREAK) */
-let progress = 0;
+        <div class="mt-6 space-y-5">  
+          <div class="glass rounded-2xl p-5 soft-pop">  
+            <h3 class="font-semibold">Step 1: Pick your desktop or window manager</h3>  
+            <p class="mt-2 text-gray-400">This is the thing you actually look at when the computer starts.</p>  
+          </div>  
 
-const interval = setInterval(() => {
-  progress += Math.random() * 20;
+          <div class="glass rounded-2xl p-5 soft-pop">  
+            <h3 class="font-semibold">Step 2: Add drivers and updates</h3>  
+            <p class="mt-2 text-gray-400">This helps the computer work properly and stay fresh.</p>  
+          </div>  
 
-  if (progress >= 100) {
-    progress = 100;
-    clearInterval(interval);
+          <div class="glass rounded-2xl p-5 soft-pop">  
+            <h3 class="font-semibold">Step 3: Optional easy Hyprland setup</h3>  
+            <p class="mt-2 text-gray-400">  
+              If you want a clean no setup required hyprland setup, run  
+              <span class="font-mono text-white"> &lt;(curl -s https://ml4w.com/os/stable)</span>  
+              on your fresh system. <span class="text-gray-500">(Optional)</span>  
+            </p>  
+          </div>  
+        </div>  
+      </div>  
+    </section>  
 
-    loader.style.display = "none";
-    app.classList.remove("hidden");
-  }
+    <section id="faq" class="section-hidden">  
+      <h2 class="mb-6 text-3xl sm:text-4xl font-bold">FAQ</h2>  
 
-  bar.style.width = progress + "%";
-}, 200);
+      <div class="space-y-4">  
+        <div class="glass rounded-2xl p-5 soft-pop">  
+          <h3 class="font-semibold">What is Arch?</h3>  
+          <p class="mt-2 text-gray-400">A Linux system you build step by step.</p>  
+        </div>  
 
-/* FAILSAFE (IMPORTANT) */
-setTimeout(() => {
-  loader.style.display = "none";
-  app.classList.remove("hidden");
-}, 6000);
-</script>
+        <div class="glass rounded-2xl p-5 soft-pop">  
+          <h3 class="font-semibold">Is this page hard to use?</h3>  
+          <p class="mt-2 text-gray-400">No. It is made to feel simple, calm, and very obvious.</p>  
+        </div>  
+      </div>  
+    </section>  
+  </div>  
+</main>
 
-</body>
-</html>
+  </div>    <script>  
+    const loader = document.getElementById("loader");  
+    const app = document.getElementById("app");  
+    const platformName = document.getElementById("platformName");  
+    const platformGreen = document.getElementById("platformGreen");  
+    const interfaceText = document.getElementById("interfaceText");  
+    const modeBadge = document.getElementById("modeBadge");  
+    const mobileModeBadge = document.getElementById("mobileModeBadge");  
+    const progressBar = document.getElementById("progressBar");  
+    const progressLabel = document.getElementById("progressLabel");  
+    const readyBox = document.getElementById("readyBox");  
+  
+    const postInstallSection = document.getElementById("postinstall");  
+    const postInstallTab = document.getElementById("postInstallTab");  
+    const postInstallTabMobile = document.getElementById("postInstallTabMobile");  
+    const lockState = document.getElementById("lockState");  
+    const lockStateMobile = document.getElementById("lockStateMobile");  
+  
+    const navLinks = Array.from(document.querySelectorAll(".nav-link"));  
+    const sections = Array.from(document.querySelectorAll("section"));  
+  
+    let postInstallUnlocked = false;  
+  
+    function isMobileLike() {  
+      return (  
+        window.matchMedia("(pointer: coarse)").matches ||  
+        window.innerWidth < 900 ||  
+        navigator.maxTouchPoints > 1  
+      );  
+    }  
+  
+    function setPlatformUI() {  
+      const mobile = isMobileLike();  
+      const platform = mobile ? "mobile" : "pc";  
+      platformName.textContent = platform;  
+      platformGreen.textContent = platform;  
+      interfaceText.textContent = mobile ? "Loading mobile interface..." : "Loading pc interface...";  
+      modeBadge.textContent = platform;  
+      mobileModeBadge.textContent = platform;  
+    }  
+  
+    function revealApp() {  
+      loader.classList.add("opacity-0");  
+      loader.style.pointerEvents = "none";  
+      setTimeout(() => {  
+        loader.style.display = "none";  
+        app.classList.remove("opacity-0");  
+      }, 300);  
+    }  
+  
+    function scrollToSection(id) {  
+      const el = document.getElementById(id);  
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });  
+    }  
+  
+    function unlockPostInstall() {  
+      if (postInstallUnlocked) return;  
+  
+      postInstallUnlocked = true;  
+      postInstallSection.classList.remove("hidden");  
+      lockState.textContent = "open";  
+      lockStateMobile.textContent = "open";  
+      postInstallTab.classList.add("active-link");  
+      postInstallTabMobile.classList.add("active-link");  
+  
+      setTimeout(() => scrollToSection("postinstall"), 150);  
+    }  
+  
+    function handlePostInstallClick(e) {  
+      e.preventDefault();  
+      unlockPostInstall();  
+    }  
+  
+    postInstallTab.addEventListener("click", handlePostInstallClick);  
+    postInstallTabMobile.addEventListener("click", handlePostInstallClick);  
+  
+    document.querySelectorAll(".copy-btn").forEach((btn) => {  
+      btn.addEventListener("click", async () => {  
+        const text = btn.getAttribute("data-copy") || "";  
+        try {  
+          await navigator.clipboard.writeText(text);  
+          const old = btn.textContent;  
+          btn.textContent = "copied!";  
+          setTimeout(() => (btn.textContent = old), 1200);  
+        } catch {  
+          const old = btn.textContent;  
+          btn.textContent = "failed";  
+          setTimeout(() => (btn.textContent = old), 1200);  
+        }  
+      });  
+    });  
+  
+    function updateActiveLinks() {  
+      const scrollPos = window.scrollY + 180;  
+  
+      navLinks.forEach((link) => {  
+        const href = link.getAttribute("href");  
+        if (!href || !href.startsWith("#")) return;  
+  
+        const section = document.querySelector(href);  
+        if (!section) return;  
+  
+        const top = section.offsetTop;  
+        const bottom = top + section.offsetHeight;  
+  
+        if (scrollPos >= top && scrollPos < bottom) {  
+          navLinks.forEach((l) => l.classList.remove("active-link"));  
+          link.classList.add("active-link");  
+        }  
+      });  
+    }  
+  
+    const observer = new IntersectionObserver((entries) => {  
+      entries.forEach((entry) => {  
+        if (entry.isIntersecting) {  
+          entry.target.classList.add("section-visible");  
+          entry.target.classList.remove("section-hidden");  
+        }  
+      });  
+    }, { threshold: 0.14 });  
+  
+    sections.forEach((section) => observer.observe(section));  
+    window.addEventListener("scroll", updateActiveLinks);  
+    window.addEventListener("resize", setPlatformUI);  
+  
+    // Loading animation:  
+    // 1) show platform  
+    // 2) wait 5 seconds total  
+    // 3) green detected state  
+    // 4) slow-at-first, then fast progress bar  
+    setPlatformUI();  
+  
+    const totalLoadMs = 5000;  
+    const start = performance.now();  
+    let greenShown = false;  
+  
+    function easeSlowThenFast(t) {  
+      // starts slow, ends fast  
+      return t * t * t;  
+    }  
+  
+    function tick(now) {  
+      const elapsed = now - start;  
+      const raw = Math.min(elapsed / totalLoadMs, 1);  
+      const eased = easeSlowThenFast(raw);  
+      const percent = Math.min(100, Math.round(eased * 100));  
+  
+      progressBar.style.width = percent + "%";  
+      progressLabel.textContent = percent + "%";  
+  
+      if (elapsed > 1800 && !greenShown) {  
+        greenShown = true;  
+        readyBox.classList.remove("hidden");  
+      }  
+  
+      if (raw < 1) {  
+        requestAnimationFrame(tick);  
+      } else {  
+        progressBar.style.width = "100%";  
+        progressLabel.textContent = "100%";  
+        setTimeout(revealApp, 400);  
+      }  
+    }  
+  
+    requestAnimationFrame(tick);  
+    updateActiveLinks();  
+  </script>  </body>  
+</html>  replace it, and make more wow adjustments for any person that touches this website
