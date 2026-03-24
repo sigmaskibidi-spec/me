@@ -6,9 +6,7 @@
   <title>Arch Linux Install Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       background:
@@ -66,11 +64,11 @@
     }
 
     .spinner {
-      width: 72px;
-      height: 72px;
+      width: 78px;
+      height: 78px;
       border-radius: 9999px;
       border: 4px solid rgba(255,255,255,0.10);
-      border-top-color: rgba(255,255,255,0.90);
+      border-top-color: rgba(255,255,255,0.95);
       animation: spin 1s linear infinite;
     }
 
@@ -87,20 +85,10 @@
       50% { opacity: 1; transform: scale(1); }
     }
 
-    .tab-glow {
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 30px rgba(255,255,255,0.03);
-    }
-
     .command {
       overflow-x: auto;
       white-space: pre;
       scrollbar-width: thin;
-    }
-
-    .mobile-topbar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
     }
 
     @media (max-width: 767px) {
@@ -129,7 +117,7 @@
            radial-gradient(circle at bottom left, rgba(168,85,247,0.14), transparent 18%);">
     </div>
 
-    <div class="relative z-10 flex flex-col items-center gap-6 px-6 text-center">
+    <div class="relative z-10 flex w-full max-w-xl flex-col items-center gap-6 px-6 text-center">
       <div class="spinner"></div>
 
       <div class="space-y-2">
@@ -144,9 +132,24 @@
         </p>
       </div>
 
+      <div class="w-full max-w-md space-y-2">
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <span>Loading</span>
+          <span id="progressLabel">0%</span>
+        </div>
+
+        <div class="h-3 w-full overflow-hidden rounded-full bg-white/10">
+          <div id="progressBar" class="h-full w-0 rounded-full bg-white transition-[width] duration-100 ease-linear"></div>
+        </div>
+      </div>
+
+      <div id="readyBox" class="hidden rounded-2xl border border-green-400/20 bg-green-400/10 px-4 py-3 text-sm text-green-300">
+        Detected platform: <span id="platformGreen" class="font-semibold">mobile</span> — ready
+      </div>
+
       <div class="flex items-center gap-2 text-xs text-gray-500">
         <span class="h-2 w-2 rounded-full bg-white pulse-dot"></span>
-        <span>Preparing a smooth experience</span>
+        <span>Making everything feel smooth</span>
       </div>
     </div>
   </div>
@@ -159,7 +162,7 @@
         <div class="mb-8">
           <div class="text-xs uppercase tracking-[0.32em] text-gray-500">Arch Docs</div>
           <h1 class="mt-2 text-2xl font-bold">Arch Guide ⚡</h1>
-          <p class="mt-2 text-sm text-gray-400">Clean, modern, and slightly dramatic.</p>
+          <p class="mt-2 text-sm text-gray-400">Simple words. Big clarity.</p>
         </div>
 
         <nav class="space-y-2">
@@ -184,7 +187,7 @@
     <!-- Content -->
     <main class="content-desktop ml-72 min-h-screen px-4 py-6 sm:px-6 lg:px-10">
       <!-- Mobile mini topbar -->
-      <div class="mobile-topbar md:hidden glass-strong rounded-2xl p-4 mb-6">
+      <div class="md:hidden glass-strong rounded-2xl p-4 mb-6 sticky top-4 z-30">
         <div class="flex items-center justify-between">
           <div>
             <div class="text-xs uppercase tracking-[0.3em] text-gray-500">Arch Docs</div>
@@ -216,9 +219,8 @@
             </div>
             <h2 class="mt-5 text-3xl sm:text-4xl font-bold">A docs-style Arch Linux install guide</h2>
             <p class="mt-4 max-w-2xl text-gray-400 leading-7">
-              This site is designed to feel like a modern documentation portal:
-              smooth transitions, sidebar navigation, hidden sections, and a clean layout
-              that works nicely on mobile and desktop.
+              This site explains Arch Linux like a really patient person would.
+              Short steps. Easy words. No confusing wall of text.
             </p>
           </div>
         </section>
@@ -229,7 +231,7 @@
           <div class="space-y-5">
             <div class="glass rounded-3xl p-6 soft-pop">
               <h3 class="text-xl font-semibold">1. Boot the Arch ISO</h3>
-              <p class="mt-2 text-gray-400">Use your USB installer and boot into the live environment.</p>
+              <p class="mt-2 text-gray-400">Put the USB in. Start the computer. Choose the Arch USB.</p>
             </div>
 
             <div class="glass rounded-3xl p-6 soft-pop">
@@ -239,36 +241,40 @@
                   copy
                 </button>
               </div>
+              <p class="mt-2 text-gray-400">This just checks if the internet is alive.</p>
               <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">ping archlinux.org</pre>
             </div>
 
             <div class="glass rounded-3xl p-6 soft-pop">
               <div class="flex items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold">3. Partition disk</h3>
+                <h3 class="text-xl font-semibold">3. Open the disk tool</h3>
                 <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="cfdisk">
                   copy
                 </button>
               </div>
+              <p class="mt-2 text-gray-400">This is where you make space for Arch.</p>
               <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">cfdisk</pre>
             </div>
 
             <div class="glass rounded-3xl p-6 soft-pop">
               <div class="flex items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold">4. Install base system</h3>
+                <h3 class="text-xl font-semibold">4. Install the base system</h3>
                 <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="pacstrap /mnt base linux linux-firmware">
                   copy
                 </button>
               </div>
+              <p class="mt-2 text-gray-400">This puts the first important Arch files onto the disk.</p>
               <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">pacstrap /mnt base linux linux-firmware</pre>
             </div>
 
             <div class="glass rounded-3xl p-6 soft-pop">
               <div class="flex items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold">5. Generate fstab</h3>
+                <h3 class="text-xl font-semibold">5. Save the disk map</h3>
                 <button class="copy-btn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300" data-copy="genfstab -U /mnt >> /mnt/etc/fstab">
                   copy
                 </button>
               </div>
+              <p class="mt-2 text-gray-400">This tells Arch where everything lives.</p>
               <pre class="command mt-4 rounded-2xl bg-black/80 p-4 text-sm text-gray-200">genfstab -U /mnt >> /mnt/etc/fstab</pre>
             </div>
           </div>
@@ -290,23 +296,23 @@
             </div>
 
             <p class="mt-4 max-w-3xl text-gray-400 leading-7">
-              After you have a working Arch system, this section is where you can add your desktop,
-              drivers, user setup, and final tweaks.
+              This part is for after Arch is already installed. Think of it like:
+              “Okay, the house exists. Now we make it comfy.”
             </p>
 
             <div class="mt-6 space-y-5">
               <div class="glass rounded-2xl p-5 soft-pop">
-                <h3 class="font-semibold">Desktop environment / window manager</h3>
-                <p class="mt-2 text-gray-400">Install your preferred setup after first boot.</p>
+                <h3 class="font-semibold">Step 1: Pick your desktop or window manager</h3>
+                <p class="mt-2 text-gray-400">This is the thing you actually look at when the computer starts.</p>
               </div>
 
               <div class="glass rounded-2xl p-5 soft-pop">
-                <h3 class="font-semibold">Drivers and updates</h3>
-                <p class="mt-2 text-gray-400">Update your system and add the drivers you need.</p>
+                <h3 class="font-semibold">Step 2: Add drivers and updates</h3>
+                <p class="mt-2 text-gray-400">This helps the computer work properly and stay fresh.</p>
               </div>
 
               <div class="glass rounded-2xl p-5 soft-pop">
-                <h3 class="font-semibold">Optional one-line setup</h3>
+                <h3 class="font-semibold">Step 3: Optional easy Hyprland setup</h3>
                 <p class="mt-2 text-gray-400">
                   If you want a clean no setup required hyprland setup, run
                   <span class="font-mono text-white"> &lt;(curl -s https://ml4w.com/os/stable)</span>
@@ -322,13 +328,13 @@
 
           <div class="space-y-4">
             <div class="glass rounded-2xl p-5 soft-pop">
-              <h3 class="font-semibold">Is Arch hard?</h3>
-              <p class="mt-2 text-gray-400">It is manual, but that is what makes it learnable and flexible.</p>
+              <h3 class="font-semibold">What is Arch?</h3>
+              <p class="mt-2 text-gray-400">A Linux system you build step by step.</p>
             </div>
 
             <div class="glass rounded-2xl p-5 soft-pop">
-              <h3 class="font-semibold">Can I keep this simple?</h3>
-              <p class="mt-2 text-gray-400">Yes — the layout is designed to stay clean while still feeling premium.</p>
+              <h3 class="font-semibold">Is this page hard to use?</h3>
+              <p class="mt-2 text-gray-400">No. It is made to feel simple, calm, and very obvious.</p>
             </div>
           </div>
         </section>
@@ -340,9 +346,13 @@
     const loader = document.getElementById("loader");
     const app = document.getElementById("app");
     const platformName = document.getElementById("platformName");
+    const platformGreen = document.getElementById("platformGreen");
     const interfaceText = document.getElementById("interfaceText");
     const modeBadge = document.getElementById("modeBadge");
     const mobileModeBadge = document.getElementById("mobileModeBadge");
+    const progressBar = document.getElementById("progressBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const readyBox = document.getElementById("readyBox");
 
     const postInstallSection = document.getElementById("postinstall");
     const postInstallTab = document.getElementById("postInstallTab");
@@ -366,9 +376,9 @@
     function setPlatformUI() {
       const mobile = isMobileLike();
       const platform = mobile ? "mobile" : "pc";
-
       platformName.textContent = platform;
-      interfaceText.textContent = `Loading ${platform} interface...`;
+      platformGreen.textContent = platform;
+      interfaceText.textContent = mobile ? "Loading mobile interface..." : "Loading pc interface...";
       modeBadge.textContent = platform;
       mobileModeBadge.textContent = platform;
     }
@@ -397,9 +407,7 @@
       postInstallTab.classList.add("active-link");
       postInstallTabMobile.classList.add("active-link");
 
-      setTimeout(() => {
-        scrollToSection("postinstall");
-      }, 120);
+      setTimeout(() => scrollToSection("postinstall"), 150);
     }
 
     function handlePostInstallClick(e) {
@@ -456,16 +464,50 @@
     }, { threshold: 0.14 });
 
     sections.forEach((section) => observer.observe(section));
-
     window.addEventListener("scroll", updateActiveLinks);
     window.addEventListener("resize", setPlatformUI);
 
-    // Let the loading screen feel intentional.
+    // Loading animation:
+    // 1) show platform
+    // 2) wait 5 seconds total
+    // 3) green detected state
+    // 4) slow-at-first, then fast progress bar
     setPlatformUI();
-    setTimeout(() => {
-      revealApp();
-      updateActiveLinks();
-    }, 1400);
+
+    const totalLoadMs = 5000;
+    const start = performance.now();
+    let greenShown = false;
+
+    function easeSlowThenFast(t) {
+      // starts slow, ends fast
+      return t * t * t;
+    }
+
+    function tick(now) {
+      const elapsed = now - start;
+      const raw = Math.min(elapsed / totalLoadMs, 1);
+      const eased = easeSlowThenFast(raw);
+      const percent = Math.min(100, Math.round(eased * 100));
+
+      progressBar.style.width = percent + "%";
+      progressLabel.textContent = percent + "%";
+
+      if (elapsed > 1800 && !greenShown) {
+        greenShown = true;
+        readyBox.classList.remove("hidden");
+      }
+
+      if (raw < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        progressBar.style.width = "100%";
+        progressLabel.textContent = "100%";
+        setTimeout(revealApp, 400);
+      }
+    }
+
+    requestAnimationFrame(tick);
+    updateActiveLinks();
   </script>
 </body>
 </html>
