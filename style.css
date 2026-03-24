@@ -1,199 +1,173 @@
 /* =========================
-   MOBILE INTERACTION SYSTEM
-   ========================= */
+   MOBILE-ONLY GOD MODE UI
+========================= */
 
 @media (max-width: 768px) {
 
-  /* -------------------------
-     TAP RIPPLE EFFECT
-  ------------------------- */
+  /* --- GLOBAL FEEL --- */
+  body {
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-  button,
-  a,
-  .soft-pop {
+  /* Smooth inertia feel */
+  html {
+    scroll-padding-top: 80px;
+  }
+
+  /* =========================
+     TAP FEEDBACK (INSANE)
+  ========================= */
+
+  a, button, .soft-pop {
     position: relative;
     overflow: hidden;
   }
 
-  button:active::after,
-  a:active::after,
-  .soft-pop:active::after {
+  a:active, button:active, .soft-pop:active {
+    transform: scale(0.96) !important;
+    transition: transform 0.08s ease;
+  }
+
+  /* Ripple effect */
+  a::after, button::after {
     content: "";
     position: absolute;
-    width: 120%;
-    height: 120%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    background: radial-gradient(circle, rgba(255,255,255,0.25), transparent 60%);
-    border-radius: 50%;
-    animation: ripple 0.5s ease-out;
-    pointer-events: none;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.25) 10%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
   }
 
-  @keyframes ripple {
-    to {
-      transform: translate(-50%, -50%) scale(1.5);
-      opacity: 0;
-    }
+  a:active::after, button:active::after {
+    opacity: 1;
   }
 
-  /* -------------------------
-     PRESS DEPTH EFFECT
-  ------------------------- */
-
-  .soft-pop {
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
-  }
-
-  .soft-pop:active {
-    transform: scale(0.94);
-    box-shadow: inset 0 4px 15px rgba(0,0,0,0.8);
-  }
-
-  /* -------------------------
-     SCROLL FADE + PARALLAX FEEL
-  ------------------------- */
+  /* =========================
+     SCROLL MAGIC
+  ========================= */
 
   section {
     transition: transform 0.4s ease, opacity 0.4s ease;
   }
 
-  /* when visible (you already toggle this in JS) */
-  .section-visible {
-    transform: translateY(0) scale(1);
-    opacity: 1;
+  section.section-visible {
+    animation: mobileFadeUp 0.6s ease;
   }
 
-  .section-hidden {
-    transform: translateY(40px) scale(0.97);
-    opacity: 0;
+  @keyframes mobileFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
-  /* -------------------------
-     ACTIVE SECTION GLOW
-  ------------------------- */
+  /* =========================
+     CARDS = FLOATING GLASS
+  ========================= */
 
-  .section-visible .glass {
-    box-shadow: 
-      0 0 25px rgba(96,165,250,0.15),
+  .glass, .glass-strong {
+    backdrop-filter: blur(22px) saturate(140%) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.6),
+      inset 0 0 20px rgba(255,255,255,0.03);
+  }
+
+  /* Glow when tapped */
+  .glass:active {
+    box-shadow:
+      0 0 25px rgba(168,85,247,0.35),
       0 10px 30px rgba(0,0,0,0.6);
   }
 
-  /* -------------------------
-     NAV CLICK FEEDBACK
-  ------------------------- */
-
-  .nav-link:active {
-    transform: scale(0.92);
-    background: rgba(96,165,250,0.2);
-  }
-
-  /* -------------------------
-     BUTTON GLOW ON TAP
-  ------------------------- */
-
-  button:active {
-    box-shadow: 
-      0 0 20px rgba(96,165,250,0.5),
-      inset 0 0 10px rgba(255,255,255,0.2);
-  }
-
-  /* -------------------------
-     TERMINAL "LIVE" FEEL
-  ------------------------- */
+  /* =========================
+     COMMAND BOX (FEELS LIKE TERMINAL)
+  ========================= */
 
   .command {
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
     position: relative;
   }
 
-  .command::after {
-    content: "";
+  .command::before {
+    content: "● ● ●";
     position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    box-shadow: inset 0 0 25px rgba(0,255,100,0.15);
-    animation: terminalPulse 3s ease-in-out infinite;
+    top: 8px;
+    left: 12px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 4px;
   }
 
-  @keyframes terminalPulse {
-    0%,100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
+  /* =========================
+     NAV BUTTONS (BIG FEEL)
+  ========================= */
+
+  .md\\:hidden a,
+  .md\\:hidden button {
+    transition: all 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.08);
   }
 
-  /* -------------------------
-     LOADER CLICK REACTION
-  ------------------------- */
-
-  #loader:active {
-    transform: scale(0.98);
+  .md\\:hidden a:active,
+  .md\\:hidden button:active {
+    background: rgba(255,255,255,0.12) !important;
+    transform: scale(0.94);
   }
 
-  /* -------------------------
-     SCROLL MOMENTUM FEEL
-  ------------------------- */
+  /* =========================
+     TOPBAR = FLOATING GLASS
+  ========================= */
 
-  main {
-    scroll-behavior: smooth;
+  .md\\:hidden.glass-strong {
+    backdrop-filter: blur(25px) !important;
+    background: rgba(0,0,0,0.6) !important;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   }
 
-  /* -------------------------
-     FLOATING UI EFFECT
-  ------------------------- */
+  /* =========================
+     LOADER FEELS PREMIUM
+  ========================= */
 
-  .glass {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  #loader {
+    backdrop-filter: blur(10px);
   }
 
-  .glass:active {
-    transform: translateY(2px) scale(0.98);
-    box-shadow: 
-      0 5px 15px rgba(0,0,0,0.8);
+  .spinner {
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.4));
   }
 
-  /* -------------------------
-     PROGRESS BAR GLOW ANIMATION
-  ------------------------- */
+  /* =========================
+     SCROLLBAR (MOBILE WEBKIT)
+  ========================= */
 
-  #progressBar {
-    position: relative;
-    overflow: hidden;
+  ::-webkit-scrollbar {
+    width: 4px;
   }
 
-  #progressBar::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -50%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,0.6),
-      transparent
-    );
-    animation: progressShine 1.5s infinite;
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 999px;
   }
 
-  @keyframes progressShine {
-    to { left: 120%; }
+  /* =========================
+     MICRO-ANIMATION ON TEXT
+  ========================= */
+
+  h2, h3 {
+    letter-spacing: 0.3px;
   }
 
-}
-
-/* =========================
-   EXTRA SMALL DEVICES BOOST
-   ========================= */
-
-@media (max-width: 420px) {
-
-  .soft-pop:active {
-    transform: scale(0.92);
-  }
-
-  button:active {
-    transform: scale(0.9);
+  /* subtle glow when visible */
+  .section-visible h2 {
+    text-shadow: 0 0 18px rgba(255,255,255,0.15);
   }
 
 }
