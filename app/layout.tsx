@@ -2,12 +2,11 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Nexus — Build the Future',
-  description: 'The platform that empowers teams to ship faster, scale smarter, and build with confidence.',
-  keywords: ['platform', 'developer', 'infrastructure', 'deployment'],
+  title: 'North® — Independent Creative Studio',
+  description: 'North is an independent creative studio building bold identities and digital experiences.',
   openGraph: {
-    title: 'Nexus — Build the Future',
-    description: 'The platform that empowers teams to ship faster, scale smarter, and build with confidence.',
+    title: 'North® — Independent Creative Studio',
+    description: 'Ideas with direction. Brand identities and digital experiences.',
     type: 'website',
   },
 }

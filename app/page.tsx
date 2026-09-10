@@ -1,105 +1,124 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
+const projects = [
+  { number: '01', title: 'Ritual Coffee', type: 'Brand system', color: 'coral', mark: 'R' },
+  { number: '02', title: 'Forma House', type: 'Digital experience', color: 'blue', mark: 'F' },
+  { number: '03', title: 'Noma Objects', type: 'Art direction', color: 'lime', mark: 'N' },
+]
+
+const services = [
+  ['01', 'Identity', 'Strategy, naming, visual systems'],
+  ['02', 'Digital', 'Websites, products, interactions'],
+  ['03', 'Campaigns', 'Creative direction, content, launch'],
+]
+
 export default function Home() {
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('in-view')),
+      { threshold: 0.15 }
+    )
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
+  const goTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    setMenuOpen(false)
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-
-      {/* 🌌 Background */}
-      <div className="fixed inset-0 flex justify-center pointer-events-none">
-        <div className="w-[700px] h-[700px] bg-purple-600/20 blur-[140px] rounded-full mt-[-200px]" />
-      </div>
-
-      {/* 🧭 Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-black/40 border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="font-bold text-lg">Nexus</h1>
-
-          <div className="flex gap-6 text-sm text-gray-400">
-            <button onClick={() => scrollTo('features')} className="hover:text-white">Features</button>
-            <button onClick={() => scrollTo('cta')} className="hover:text-white">Get Started</button>
-          </div>
+    <main>
+      <nav className="nav">
+        <button className="logo" onClick={() => goTo('top')} aria-label="Back to top">
+          NORTH<span>®</span>
+        </button>
+        <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
+          <button onClick={() => goTo('work')}>Work</button>
+          <button onClick={() => goTo('studio')}>Studio</button>
+          <button onClick={() => goTo('contact')}>Contact</button>
         </div>
+        <button className="menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+          {menuOpen ? 'Close' : 'Menu'}
+        </button>
       </nav>
 
-      {/* 🚀 Hero */}
-      <section className="text-center px-6 pt-28 max-w-4xl mx-auto">
-        <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-          Build without <br />
-          <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
-            limits.
-          </span>
+      <section className="hero" id="top">
+        <div className="hero-kicker"><span />Independent creative studio · 2026</div>
+        <h1>
+          <span className="line"><span>Ideas with</span></span>
+          <span className="line italic"><span>direction.</span></span>
         </h1>
-
-        <p className="text-gray-400 text-lg mb-10 max-w-xl mx-auto">
-          A real modern website — built on your phone using GitHub and Vercel.
-        </p>
-
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={() => scrollTo('cta')}
-            className="bg-white text-black px-6 py-3 rounded-xl font-medium hover:scale-105 active:scale-95 transition"
-          >
-            Get Started
+        <div className="hero-bottom">
+          <p>We build bold identities and digital experiences for people shaping what comes next.</p>
+          <button className="round-button" onClick={() => goTo('work')} aria-label="See selected work">
+            <svg viewBox="0 0 24 24"><path d="M12 4v16M5 13l7 7 7-7" /></svg>
           </button>
+        </div>
+        <div className="shape shape-one" /><div className="shape shape-two" />
+      </section>
 
-          <button
-            onClick={() => scrollTo('features')}
-            className="border border-gray-700 px-6 py-3 rounded-xl hover:bg-white/10 transition"
-          >
-            Explore
-          </button>
+      <section className="ticker" aria-label="Our disciplines">
+        <div className="ticker-track">
+          {[0, 1].map(n => <div className="ticker-set" key={n}><span>Strategy</span><i>✦</i><span>Identity</span><i>✦</i><span>Digital</span><i>✦</i><span>Campaigns</span><i>✦</i></div>)}
         </div>
       </section>
 
-      {/* 📊 Features */}
-      <section id="features" className="mt-32 px-6 max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-
-        {[
-          {
-            title: "Blazing Fast",
-            desc: "Instant deploys with global performance."
-          },
-          {
-            title: "Modern UI",
-            desc: "Actually looks like a real product."
-          },
-          {
-            title: "Built on Mobile",
-            desc: "You made this from your phone. Insane."
-          }
-        ].map((f, i) => (
-          <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-md hover:bg-white/10 hover:scale-[1.02] transition">
-            <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-            <p className="text-gray-400 text-sm">{f.desc}</p>
-          </div>
-        ))}
-
+      <section className="work section" id="work">
+        <div className="section-heading reveal">
+          <p>Selected work</p><p>2024—2026</p>
+        </div>
+        <div className="projects">
+          {projects.map((project, index) => (
+            <article className="project reveal" key={project.title} style={{ transitionDelay: `${index * 100}ms` }}>
+              <div className={`project-image ${project.color}`}>
+                <span className="project-mark">{project.mark}</span>
+                <div className="project-stamp">NORTH<br />STUDIO</div>
+                <button className="project-arrow" aria-label={`View ${project.title}`}>↗</button>
+              </div>
+              <div className="project-info">
+                <h2>{project.title}</h2><p>{project.type}</p><span>{project.number}</span>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
 
-      {/* 💎 CTA */}
-      <section id="cta" className="mt-32 text-center px-6 pb-20">
-        <h2 className="text-3xl md:text-5xl font-bold mb-6">
-          Ready to build something insane?
-        </h2>
-
-        <button
-          onClick={() => alert('You clicked it 😏')}
-          className="bg-gradient-to-r from-purple-500 to-blue-500 px-8 py-4 rounded-xl font-medium hover:scale-105 active:scale-95 transition"
-        >
-          Start Now
-        </button>
+      <section className="statement" id="studio">
+        <p className="eyebrow reveal">Small by design. Big in ambition.</p>
+        <h2 className="reveal">We turn <em>curiosity</em> into clear, memorable work that moves at the speed of culture.</h2>
+        <div className="statement-meta reveal">
+          <p>Based everywhere<br />Working worldwide</p>
+          <p>Available for select<br />projects in 2026</p>
+        </div>
       </section>
 
-      {/* 🪶 Footer */}
-      <footer className="text-center text-gray-500 text-sm pb-10">
-        Built with GitHub + Vercel 🚀
+      <section className="services section">
+        <div className="section-heading reveal"><p>What we do</p><p>Capabilities</p></div>
+        <div className="service-list">
+          {services.map(([number, title, description]) => (
+            <div className="service reveal" key={title}>
+              <span>{number}</span><h3>{title}</h3><p>{description}</p><b>↗</b>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer id="contact">
+        <div className="footer-top reveal">
+          <p>Have a project in mind?</p>
+          <a href="mailto:hello@north.studio">Let’s make<br /><em>something good.</em> ↗</a>
+        </div>
+        <div className="footer-bottom">
+          <div className="logo footer-logo">NORTH<span>®</span></div>
+          <p>Instagram &nbsp; LinkedIn &nbsp; Behance</p>
+          <p>© 2026 North Studio</p>
+        </div>
       </footer>
-
     </main>
   )
 }
